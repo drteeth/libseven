@@ -2,15 +2,20 @@
 
 set -ex
 
-cargo +nightly build --target i686-linux-android -Zbuild-std
+cargo clean
 
-# cargo tly build -t arm64-v8a build -Zbuild-std
+# mkdir -p android/app/src/main/jniLibs/x86_64
+# cargo build --target x86_64-linux-android --release
+# ln -snf `pwd`/target/x86_64-linux-android/release/libseven.so `pwd`/android/app/src/main/jniLibs/x86_64/libseven.so
+
+# mkdir -p android/app/src/main/jniLibs/arm64-v8a
 # cargo build --target aarch64-linux-android --release
-# cargo build --target armv7-linux-androidabi --release
-# cargo build --target i686-linux-android --release
+# ln -snf `pwd`/target/aarch64-linux-android/release/libseven.so `pwd`/android/app/src/main/jniLibs/arm64-v8a/libseven.so
 
-mkdir -p android/app/src/main/jniLibs/arm64
-mkdir -p android/app/src/main/jniLibs/armeabi
 mkdir -p android/app/src/main/jniLibs/x86
+cargo build --target i686-linux-android --release
+ln -snf `pwd`/target/i686-linux-android/release/libseven.so `pwd`/android/app/src/main/jniLibs/x86/libseven.so
 
-ln -s `pwd`/target/release/libseven.so `pwd`/android/app/src/main/jniLibs/x86/libseven.so
+# mkdir -p android/app/src/main/jniLibs/armeabi-v7a
+# cargo build --target armv7-linux-android --release
+# ln -s `pwd`/target/release/libseven.so `pwd`/android/app/src/main/jniLibs/x86/libseven.so

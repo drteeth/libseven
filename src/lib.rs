@@ -9,7 +9,7 @@ pub extern "C" fn rust_greeting(to: *const c_char) -> *mut c_char {
         Err(_) => "Error",
     };
 
-    return CString::new("Hello ".to_owned() + recipient)
+    return CString::new("RAWR @ ".to_owned() + recipient)
         .unwrap()
         .into_raw();
 }
@@ -25,7 +25,7 @@ pub mod android {
     use super::*;
 
     #[no_mangle]
-    pub unsafe extern "C" fn Java_com_sevenshifts_libsevenclient_RustGreetings_greeting(
+    pub unsafe extern "C" fn Java_com_sevenshifts_libsevenclient_RustGreeting_greeting(
         env: JNIEnv,
         _: JClass,
         java_pattern: JString,
