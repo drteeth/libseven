@@ -1,0 +1,11 @@
+p, company:11_user_write, company:11, user, write, org:11, 1 < 2
+p, department:33_user_write, department:33, user, write, org:11, 1 < 2
+p, location:22_user_write, location:22, user, write, org:11, 1 < 2
+p, company:11_user_read, company:11, user, read, org:11, 1 < 2
+
+g, 55, company:11_user_read, org:11
+g, 55, location:22_user_write, org:11
+
+g2, location:22, company:11, org:11
+g2, location:23, company:11, org:11
+g2, department:33, location:22, org:11

@@ -2,8 +2,6 @@
 
 set -ex
 
-cargo clean
-
 # mkdir -p android/app/src/main/jniLibs/x86_64
 # cargo build --target x86_64-linux-android --release
 # ln -snf `pwd`/target/x86_64-linux-android/release/libseven.so `pwd`/android/app/src/main/jniLibs/x86_64/libseven.so
