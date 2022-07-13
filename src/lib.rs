@@ -1,21 +1,7 @@
 use casbin::prelude::*;
 use futures::executor::block_on;
 use std::collections::BTreeMap;
-use std::ffi::{CStr, CString};
-use std::os::raw::c_char;
-
-#[no_mangle]
-pub extern "C" fn rust_greeting(to: *const c_char) -> *mut c_char {
-    let c_str = unsafe { CStr::from_ptr(to) };
-    let recipient = match c_str.to_str() {
-        Ok(string) => string,
-        Err(_) => "Error",
-    };
-
-    return CString::new("RAWR @ ".to_owned() + recipient)
-        .unwrap()
-        .into_raw();
-}
+use std::ffi::CString;
 
 struct NamedPolicy {
     ptype: String,
@@ -80,7 +66,7 @@ async fn enforce(
     };
 }
 
-#[cfg(target_os = "android")]
+// #[cfg(target_os = "android")]
 #[allow(non_snake_case)]
 pub mod android {
     extern crate jni;
