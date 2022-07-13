@@ -14,17 +14,7 @@ android {
         ndkVersion '21.4.7075529'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-//        ndk {
-//            abiFilters "armeabi-v7a", "x86", "aarch64", "x86_64"
-//        }
     }
-
-//    packagingOptions {
-//        jniLibs {
-//            useLegacyPackaging true
-//        }
-//    }
 
     buildTypes {
         release {
