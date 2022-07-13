@@ -2,12 +2,13 @@ package com.sevenshifts.libsevenclient;
 
 import android.content.res.AssetManager;
 
+import com.google.gson.Gson;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 public class AccessControlList {
     static {
@@ -15,44 +16,20 @@ public class AccessControlList {
     }
 
     private final String modelText;
-    private final String[] policyLines;
+    private final String policy;
+
+    public AccessControlList(String model, String policy) {
+        this.modelText = model;
+        this.policy = policy;
+    }
 
     public static AccessControlList createFromFiles(AssetManager assets, String modelFilename, String policyFilename) {
-        String model = readModelFile(assets, modelFilename);
-        String[] policy = readPolicyFile(assets, policyFilename);
+        String model = readFile(assets, modelFilename);
+        String policy = readFile(assets, policyFilename);
         return new AccessControlList(model, policy);
     }
 
-    public AccessControlList(String model, String[] policy) {
-        this.modelText = model;
-        this.policyLines = policy;
-    }
-
-    public boolean enforce(String[] request) {
-        return enforce(modelText, policyLines, request);
-    }
-
-    private native boolean enforce(String model, String[] policyLines, String[] request);
-
-    private static String[] readPolicyFile(AssetManager assets, String filename) {
-        try (InputStream what = assets.open(filename)) {
-            InputStreamReader inputStreamReader;
-            inputStreamReader = new InputStreamReader(what);
-            BufferedReader reader = new BufferedReader(inputStreamReader);
-
-            List<String> lines = new ArrayList<>();
-            for (String line; (line = reader.readLine()) != null; ) {
-                lines.add(line);
-            }
-
-            String[] arrayOfLines = new String[lines.size()];
-            return lines.toArray(arrayOfLines);
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to read policy file: ".concat(filename), e);
-        }
-    }
-
-    private static String readModelFile(AssetManager assets, String filename) {
+    private static String readFile(AssetManager assets, String filename) {
         try (InputStream what = assets.open(filename)) {
             InputStreamReader inputStreamReader = new InputStreamReader(what);
             BufferedReader reader = new BufferedReader(inputStreamReader);
@@ -67,4 +44,12 @@ public class AccessControlList {
             throw new RuntimeException("Unable to read model file: ".concat(filename), e);
         }
     }
+
+    public String enforce(Map<String, String> subject, String companyId, String resource, String action) {
+        Gson gson = new Gson();
+        String subjectJSON = gson.toJson(subject);
+        return enforce(this.modelText, this.policy, subjectJSON, companyId, resource, action);
+    }
+
+    private native String enforce(String model, String policy, String subjectJSON, String organizationalUnit, String resource, String action);
 }

@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -13,35 +16,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView outputView = findViewById(R.id.output);
-
-//        RustGreeting greeting = new RustGreeting();
-//        String hello = greeting.sayHello("rawr");
-//        outputView.setText(hello);
-
-        outputView.setText(evaluateAcl());
+        TextView sevenShiftsView = findViewById(R.id.seven_shifts);
+        sevenShiftsView.setText(evaluate7Shifts());
     }
 
     @NonNull
-    private String evaluateAcl() {
-        String modelFile = "acl.conf";
-        String policyFile = "acl.csv";
+    private String evaluate7Shifts() {
+        String modelFile = "7shifts.conf";
+        String policyFile = "7shifts.csv";
         AccessControlList acl = AccessControlList.createFromFiles(getAssets(), modelFile, policyFile);
 
-        String[] request = new String[]{"alice", "data1", "read"};
-        return evaluate("ACL", acl, request);
-    }
+        User user = new User("55", "org:11");
+        Map<String, String> subject = new HashMap<>();
+        subject.put("id", user.id);
+        subject.put("org", user.companyId);
 
-    @NonNull
-    private String evaluate(String name, AccessControlList acl, String[] stuff) {
         try {
-            if (acl.enforce(stuff)) {
-                return String.format("%s is OK", name);
-            } else {
-                return String.format("%s is REFUSED", name);
-            }
+            return acl.enforce(subject, "company:11", "user", "read");
         } catch(Exception e) {
-            return name + " failed: " + e.getLocalizedMessage();
+            return "7shifts" + " failed: " + e.getLocalizedMessage();
         }
     }
 }
