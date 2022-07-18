@@ -50,7 +50,7 @@ jobs:
 
   build:
     name: Build
-      runs-on ubuntu-linux
+    runs-on: ubuntu-linux
     steps:
       - name: Setup | Checkout
         uses: actions/checkout@v2
