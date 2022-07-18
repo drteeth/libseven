@@ -44,15 +44,19 @@ jobs:
         with:
           java-version: 1.8
 
-      # - name: setup env
-      #   run:
-      #     source .ci_tools/setup_env.sh
-      #
-      # - uses: actions-rs/toolchain@v1
-      #   with:
-      #     toolchain: stable
-      #     target: ${{ matrix.target }}
-      #     override: true
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+          override: true
+
+      - name: setup env
+        run:
+          source .ci_tools/setup_env.sh
+
 
       # - uses: actions-rs/cargo@v1
       #   with:
