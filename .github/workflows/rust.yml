@@ -44,21 +44,21 @@ jobs:
         with:
           java-version: 1.8
 
+      - name: install NDK
+        run:
+          echo y | $ANDROID_HOME/tools/bin/sdkmanager "ndk;21.4.7075529" --channel=3;
+
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           target: ${{ matrix.target }}
           override: true
 
-      - name: install NDK
-        run:
-          echo y | $ANDROID_HOME/tools/bin/sdkmanager "ndk;21.4.7075529" --channel=3;
-
-      # - uses: actions-rs/cargo@v1
-      #   with:
-      #     # use-cross: true
-      #     command: build
-      #     args: --release --target=${{ matrix.target }}
+      - uses: actions-rs/cargo@v1
+        with:
+          # use-cross: true
+          command: build
+          args: --release --target=${{ matrix.target }}
 
 
 # cargo build --target x86_64-linux-android --release
