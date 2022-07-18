@@ -50,10 +50,9 @@ jobs:
           target: ${{ matrix.target }}
           override: true
 
-      - name: setup env
+      - name: install NDK
         run:
-          source .ci_tools/setup_env.sh
-
+          echo y | $ANDROID_HOME/tools/bin/sdkmanager "ndk;21.4.7075529" --channel=3;
 
       # - uses: actions-rs/cargo@v1
       #   with:
