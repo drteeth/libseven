@@ -44,9 +44,6 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
-
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -56,7 +53,6 @@ jobs:
       - name: setup env
         run:
           source .ci_tools/setup_env.sh
-
 
       # - uses: actions-rs/cargo@v1
       #   with:
