@@ -10,22 +10,6 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  # build:
-  #   name: Build
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       target:
-  #         - x86_64-linux-android
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: ATiltedTree/setup-rust@v1
-  #       with:
-  #         rust-version: stable
-  #         targets: ${{ matrix.target }}
-  #     - name: Build | Build releases
-  #       run: cargo build --release --target ${{ matrix.target }}
-
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -33,9 +17,9 @@ jobs:
       matrix:
         target:
           - x86_64-linux-android
-          # - armv7-linux-androideabi
-          # - aarch64-linux-android
-          # - i686-linux-android
+          - armv7-linux-androideabi
+          - aarch64-linux-android
+          - i686-linux-android
     steps:
       - uses: actions/checkout@v2
 
@@ -48,10 +32,6 @@ jobs:
         run:
           echo y | $ANDROID_HOME/tools/bin/sdkmanager "ndk;21.4.7075529"
 
-      - name: tell me where the ndk is...
-        run:
-          echo ">>>>${ANDROID_HOME}<<<<"
-
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -60,79 +40,5 @@ jobs:
 
       - uses: actions-rs/cargo@v1
         with:
-          # use-cross: true
           command: build
           args: --release --target=${{ matrix.target }}
-
-
-# cargo build --target x86_64-linux-android --release
-# cargo build --target aarch64-linux-android --release
-# cargo build --target i686-linux-android --release
-# cargo build --target armv7-linux-androideabi --release
-
-# name: Libseven
-#
-# on:
-#   push:
-#     branches:
-#       - main
-#   pull_request:
-#
-# jobs:
-#   lint:
-#     name: Lint
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Setup | Checkout
-#         uses: actions/checkout@v2
-#       - name: Setup | Rust
-#         uses: ATitledTree/setup-rust@v1
-#         with:
-#           rust-version: stable
-#           components: clippy
-#       - name: Build | Lint
-#         run: cargo clippy
-#
-#   compile:
-#     name: Compile
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Setup | Checkout
-#         uses: actions/checkout@v2
-#       - name: Setup | Rust
-#         uses: ATitledTree/setup-rust@v1
-#         with:
-#           rust-version: stable
-#       - name: Build | Compile
-#         run: cargo check
-#
-#   test:
-#     name: Test
-#     runs-on: ubuntu-latest
-#     needs: [compile]
-#     steps:
-#       - name: Setup | Checkout
-#         uses: actions/checkout@v2
-#       - name: Setup | Rust
-#         uses: ATitledTree/setup-rust@v1
-#         with:
-#           rust-version: stable
-#       - name: Build | Test
-#         run: cargo test
-#
-#
-#   build:
-#     name: Build
-#     runs-on: ubuntu-linux
-#     needs: [compile]
-#     steps:
-#       - name: Setup | Checkout
-#         uses: actions/checkout@v2
-#       - name: Setup | Rust
-#         uses: ATitledTree/setup-rust@v1
-#         with:
-#           rust-version: stable
-#           targets: x86_64-linux-android, x86_64-linux-android, armv7-linux-androideabi, aarch64-linux-android, i686-linux-android
-#       - name: Build | Build releases
-#         run: ./build.sh
-#
